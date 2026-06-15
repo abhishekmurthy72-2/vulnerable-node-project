@@ -11,10 +11,11 @@ pool:
 
 
 variables:
-  - group: CheckmarxCredentials  # References your variable group
+  - group: CheckmarxCredentials  # References your variable group   # BuildprojectName
+  - name: rawRepoName       # BuildprojectName
+    value: '$(Build.Repository.Name)'
   - name: projectName
-    value: '$(Build.Repository.Name)'     # BuildprojectName
-
+    value: $(rawRepoName)/'-'/'-g')
 
 
 steps:
