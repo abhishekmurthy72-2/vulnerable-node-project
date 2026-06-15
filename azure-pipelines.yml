@@ -9,6 +9,14 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+
+variables:
+  - group: CheckmarxCredentials  # References your variable group
+  - name: projectName
+    value: '$(Build.Repository.Name)'     # BuildprojectName
+
+
+
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
@@ -17,13 +25,6 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
-
-variables:
-  - group: CheckmarxCredentials  # References your variable group
-  - name: projectName
-    value: '$(Build.Repository.Name)'     # BuildprojectName
-
-
 
 - task: Application security testing@2026
   displayName: Running Checkmarx CxSAST scanning
@@ -48,8 +49,6 @@ variables:
       chmod +x ScaResolver
       ls -l
 #************************************************************** 
-
-
 
 - task: Application security testing@2026
   displayName: Running SCA using SCA Resolver
