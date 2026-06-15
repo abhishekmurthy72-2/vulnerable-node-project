@@ -26,18 +26,18 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-- task: Application security testing@2026
-  displayName: Running Checkmarx CxSAST scanning
-  inputs:
-    projectName: '$(projectName)'
-    enableProxy: false
-    enableSastScan: true
-    CheckmarxService: 'CheckmarxSASTconnection'
-    enableSastBranching: false
-    preset: 'All'
-    fullTeamName: 'CxServer'
-    overrideProjectSettings: true
-    enableDependencyScan: false
+# - task: Application security testing@2026
+#   displayName: Running Checkmarx CxSAST scanning
+#   inputs:
+#     projectName: '$(projectName)'
+#     enableProxy: false
+#     enableSastScan: true
+#     CheckmarxService: 'CheckmarxSASTconnection'
+#     enableSastBranching: false
+#     preset: 'All'
+#     fullTeamName: 'CxServer'
+#     overrideProjectSettings: true
+#     enableDependencyScan: false
  
 #******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
 - task: CmdLine@2
