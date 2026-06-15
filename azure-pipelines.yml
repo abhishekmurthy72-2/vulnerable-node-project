@@ -57,7 +57,7 @@ steps:
     enableSastScan: false
     enableDependencyScan: true
     dependencyServerURL: 'CXSCACHAMPION'
-    scaTeam: '/CxServer/SCA-PM/Champions/'
+    scaTeam: '/Champions/'
     isEnableScaResolver: true
     pathToScaResolver: '$(Build.SourcesDirectory)'
     scaResolverAddParameters: |
