@@ -59,7 +59,7 @@ steps:
     dependencyServerURL: 'CXSCACHAMPION'
     scaTeam: '/CxServer/SCA-PM/Champions/'
     isEnableScaResolver: true
-    pathToScaResolver: '$(Build.SourcesDirectory)/ScaResolver'
+    pathToScaResolver: '$(Build.SourcesDirectory)'
     scaResolverAddParameters: |
       -s $(Build.SourcesDirectory)
       -r $(Build.SourcesDirectory)
