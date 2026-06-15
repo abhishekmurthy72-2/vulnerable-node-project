@@ -14,7 +14,8 @@ variables:
   - group: CheckmarxCredentials  # References your variable group   # BuildprojectName
   - name: projectName
     value: 'NewTestprojectexploitablepath'
-
+  - name: System.Debug
+    value: true  # ← Enable debug logging for sca resolver
 
 steps:
 - script: echo Hello, world!
@@ -25,59 +26,29 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-# - task: Application security testing@2026
-#   displayName: Running Checkmarx CxSAST scanning
-#   inputs:
-#     projectName: '$(projectName)'
-#     enableProxy: false
-#     enableSastScan: true
-#     CheckmarxService: 'CheckmarxSASTconnection'
-#     enableSastBranching: false
-#     fullTeamName: 'CxServer'
-#     enableDependencyScan: false
+- task: Application security testing@2026
+  displayName: Running Checkmarx CxSAST scanning
+  inputs:
+    projectName: '$(projectName)'
+    enableProxy: false
+    enableSastScan: true
+    CheckmarxService: 'CheckmarxSASTconnection'
+    enableSastBranching: false
+    fullTeamName: 'CxServer'
+    enableDependencyScan: false
  
- #******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
-# - task: CmdLine@2
-#   displayName: Downloading and extract SCA Resolver
-#   inputs:
-#     script: |
-#       echo ---------- Downloading and installing SCA Resolver ----------
-#       curl -L https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz -o ScaResolver-linux64.tar.gz
-#       tar -xvf ScaResolver-linux64.tar.gz
-#       rm ScaResolver-linux64.tar.gz
-#       chmod +x ScaResolver
-#       ls -l
-#************************************************************** 
+#******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
 - task: CmdLine@2
-  displayName: 'Download and Extract SCA Resolver'
+  displayName: Downloading and extract SCA Resolver
   inputs:
     script: |
-      echo "Starting SCA Resolver download..."
-      cd $(Build.SourcesDirectory)
-      
-      # Download
-      curl -L -o ScaResolver-linux64.tar.gz https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz
-      if [ $? -ne 0 ]; then echo "Download failed!"; exit 1; fi
-      
-      # Verify download
-      if [ ! -f ScaResolver-linux64.tar.gz ]; then
-        echo "ERROR: Downloaded file not found!"
-        ls -la
-        exit 1
-      fi
-      
-      # Extract
+      echo ---------- Downloading and installing SCA Resolver ----------
+      curl -L https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz -o ScaResolver-linux64.tar.gz
       tar -xvf ScaResolver-linux64.tar.gz
-      if [ $? -ne 0 ]; then echo "Extraction failed!"; exit 1; fi
-      
-      # Cleanup
-      rm -f ScaResolver-linux64.tar.gz
-      
-      # Verify
-      echo "Verifying extraction..."
-      ls -la ScaResolver
+      rm ScaResolver-linux64.tar.gz
       chmod +x ScaResolver
-      ./ScaResolver --version
+      ls -l
+#************************************************************** 
 
 
       
