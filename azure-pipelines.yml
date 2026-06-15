@@ -37,18 +37,45 @@ steps:
 #     enableDependencyScan: false
  
  #******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
+# - task: CmdLine@2
+#   displayName: Downloading and extract SCA Resolver
+#   inputs:
+#     script: |
+#       echo ---------- Downloading and installing SCA Resolver ----------
+#       curl -L https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz -o ScaResolver-linux64.tar.gz
+#       tar -xvf ScaResolver-linux64.tar.gz
+#       rm ScaResolver-linux64.tar.gz
+#       chmod +x ScaResolver
+#       ls -l
+#************************************************************** 
 - task: CmdLine@2
-  displayName: Downloading and extract SCA Resolver
+  displayName: 'Debug: Check ScaResolver and Environment'
   inputs:
     script: |
-      echo ---------- Downloading and installing SCA Resolver ----------
-      curl -L https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz -o ScaResolver-linux64.tar.gz
-      tar -xvf ScaResolver-linux64.tar.gz
-      rm ScaResolver-linux64.tar.gz
-      chmod +x ScaResolver
-      ls -l
-#************************************************************** 
+      echo "=== Current Directory ==="
+      pwd
+      
+      echo "=== ScaResolver Location and Permissions ==="
+      ls -la $(Build.SourcesDirectory)/ScaResolver
+      file $(Build.SourcesDirectory)/ScaResolver
+      
+      echo "=== Testing ScaResolver Execution ==="
+      $(Build.SourcesDirectory)/ScaResolver --version 2>&1 || true
+      echo "Exit code: $?"
+      
+      echo "=== Environment Check ==="
+      echo "PATH: $PATH"
+      which java || echo "Java not found"
+      ldd $(Build.SourcesDirectory)/ScaResolver 2>&1 | head -20 || true
+      
+      echo "=== Disk Space ==="
+      df -h $(Build.SourcesDirectory)
+      
+      echo "=== Source Directory Contents ==="
+      ls -la $(Build.SourcesDirectory) | head -20
 
+
+      
 - task: Application security testing@2026
   displayName: Running SCA using SCA Resolver
   inputs:
