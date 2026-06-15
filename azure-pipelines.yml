@@ -49,30 +49,35 @@ steps:
 #       ls -l
 #************************************************************** 
 - task: CmdLine@2
-  displayName: 'Debug: Check ScaResolver and Environment'
+  displayName: 'Download and Extract SCA Resolver'
   inputs:
     script: |
-      echo "=== Current Directory ==="
-      pwd
+      echo "Starting SCA Resolver download..."
+      cd $(Build.SourcesDirectory)
       
-      echo "=== ScaResolver Location and Permissions ==="
-      ls -la $(Build.SourcesDirectory)/ScaResolver
-      file $(Build.SourcesDirectory)/ScaResolver
+      # Download
+      curl -L -o ScaResolver-linux64.tar.gz https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz
+      if [ $? -ne 0 ]; then echo "Download failed!"; exit 1; fi
       
-      echo "=== Testing ScaResolver Execution ==="
-      $(Build.SourcesDirectory)/ScaResolver --version 2>&1 || true
-      echo "Exit code: $?"
+      # Verify download
+      if [ ! -f ScaResolver-linux64.tar.gz ]; then
+        echo "ERROR: Downloaded file not found!"
+        ls -la
+        exit 1
+      fi
       
-      echo "=== Environment Check ==="
-      echo "PATH: $PATH"
-      which java || echo "Java not found"
-      ldd $(Build.SourcesDirectory)/ScaResolver 2>&1 | head -20 || true
+      # Extract
+      tar -xvf ScaResolver-linux64.tar.gz
+      if [ $? -ne 0 ]; then echo "Extraction failed!"; exit 1; fi
       
-      echo "=== Disk Space ==="
-      df -h $(Build.SourcesDirectory)
+      # Cleanup
+      rm -f ScaResolver-linux64.tar.gz
       
-      echo "=== Source Directory Contents ==="
-      ls -la $(Build.SourcesDirectory) | head -20
+      # Verify
+      echo "Verifying extraction..."
+      ls -la ScaResolver
+      chmod +x ScaResolver
+      ./ScaResolver --version
 
 
       
