@@ -92,4 +92,4 @@ steps:
     scaTeam: '/Champions'
     isEnableScaResolver: true
     pathToScaResolver: '$(Build.SourcesDirectory)'
-    scaResolverAddParameters: '-s $(Build.SourcesDirectory) -n $(projectName) -a $(scaTenant) -u $(scaUsername) -p $(scaPassword) --cxuser $(sastUsername) --cxserver $(sastUrl) --cxpassword $(sastPassword) --cxprojectname $(projectName)  --log-level Debug'
+    scaResolverAddParameters: '-s $(Build.SourcesDirectory) -n $(projectName)  -r scaResults/results.json --sast-result-path sastResults/results.json --cxuser $(sastUsername) --cxserver $(sastUrl) --cxpassword $(sastPassword) --cxprojectname $(projectName)  --log-level Debug'
