@@ -18,23 +18,56 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
+variables:
+  - group: CheckmarxCredentials  # References your variable group
+  - name: projectName
+    value: '$(Build.Repository.Name)'     # BuildprojectName
+
+
 
 - task: Application security testing@2026
+  displayName: Running Checkmarx CxSAST scanning
   inputs:
-    projectName: 'testsastproj'
+    projectName: '$(projectName)'
     enableProxy: false
     enableSastScan: true
     CheckmarxService: 'CheckmarxSASTconnection'
     enableSastBranching: false
     fullTeamName: 'CxServer'
     enableDependencyScan: false
+ 
+ #******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
+- task: CmdLine@2
+  displayName: Downloading and extract SCA Resolver
+  inputs:
+    script: |
+      echo ---------- Downloading and installing SCA Resolver ----------
+      curl -L https://sca-downloads.s3.amazonaws.com/cli/latest/ScaResolver-linux64.tar.gz -o ScaResolver-linux64.tar.gz
+      tar -xvf ScaResolver-linux64.tar.gz
+      rm ScaResolver-linux64.tar.gz
+      chmod +x ScaResolver
+      ls -l
+#************************************************************** 
+
 
 
 - task: Application security testing@2026
+  displayName: Running SCA using SCA Resolver
   inputs:
-    projectName: 'Testing'
+    projectName: '$(projectName)'
     enableProxy: false
     enableSastScan: false
     enableDependencyScan: true
     dependencyServerURL: 'CXSCACHAMPION'
     scaTeam: 'CxServer'
+    isEnableScaResolver: true
+    pathToScaResolver: '$(Build.SourcesDirectory)/ScaResolver'
+    scaResolverAddParameters: |
+      -s $(Build.SourcesDirectory)
+      -r $(Build.SourcesDirectory)
+      --sast-result-path $(Build.SourcesDirectory) 
+      --cxserver $(sastUrl) 
+      --cxuser $(sastUsername) 
+      --cxpassword $(sastPassword) 
+      --cxprojectname $(projectName) 
+      --log-level Debug
