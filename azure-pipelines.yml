@@ -18,26 +18,19 @@ variables:
     value: true  # ← Enable debug logging for sca resolver
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
-# - task: Application security testing@2026
-#   displayName: Running Checkmarx CxSAST scanning
-#   inputs:
-#     projectName: '$(projectName)'
-#     enableProxy: false
-#     enableSastScan: true
-#     CheckmarxService: 'CheckmarxSASTconnection'
-#     enableSastBranching: false
-#     preset: 'All'
-#     fullTeamName: 'CxServer'
-#     overrideProjectSettings: true
-#     enableDependencyScan: false
+- task: Application security testing@2026
+  displayName: Running Checkmarx CxSAST scanning
+  inputs:
+    projectName: '$(projectName)'
+    enableProxy: false
+    enableSastScan: true
+    CheckmarxService: 'CheckmarxSASTconnection'
+    enableSastBranching: false
+    preset: 'All'
+    fullTeamName: 'CxServer'
+    overrideProjectSettings: true
+    enableDependencyScan: false
  
 #******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
 - task: CmdLine@2
@@ -52,8 +45,26 @@ steps:
       ls -l
 #************************************************************** 
 
+  # - task: Checkmarx AST@3
+  #   inputs:
+  #     CheckmarxService: 'Cx_Prajwal_PS'
+  #     projectName: '$(Build.Repository.Name)'
+  #     branchName: '$(Build.SourceBranchName)'
+  #     tenantName: '5twda'
+  #     additionalParams: '--scan-types "sast"'
 
-      
+# - task: Building dependencies 
+#   input: 
+#     script: "mvn clean install -U"    
+
+# - task: Checkmarx AST@3
+#   inputs:
+#     CheckmarxService: 'CX_Auth_details'
+#     projectName: '$(Build.Repository.Name)'
+#     branchName: '$(Build.SourceBranchName)'
+#     tenantName: 'sdsdfsef'
+#     additionalParams: '--scan-types "sca" --sca-resolver "C:\Tools\ScaResolver\ScaResolver-win64 (3)\ScaResolver.exe" --sca-resolver-params "--log-level 'Debug' --extract-depth 10 --extract-archives zip --disable-delta-scan  --proxies proxyurl:port "'
+
 - task: Application security testing@2026
   displayName: Running SCA using SCA Resolver
   inputs:
