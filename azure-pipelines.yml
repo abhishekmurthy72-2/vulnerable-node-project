@@ -30,6 +30,17 @@ steps:
     preset: 'All'
     fullTeamName: 'CxServer'
     overrideProjectSettings: true
+    fullScansScheduled: true
+    fullScanCycle: '99' # After how many incremental scans you want to enable full scan
+    comment: 'Scan-Origin - Azure DevOps, Branch - $(Build.SourceBranchName)' #Comments will reflect in the cxsast scans for placeholders and filters
+    vulnerabilityThreshold: true
+    failBuildForNewVulnerabilitiesEnabled: false
+    failBuildForNewVulnerabilitiesSeverity: 'CRITICAL'
+    critical: '300'
+    high: '10'
+    medium: '10'
+    low: '10'
+    enablePolicyViolations: true
     enableDependencyScan: false
  
 #******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
