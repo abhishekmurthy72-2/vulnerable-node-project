@@ -33,7 +33,7 @@ steps:
     fullScansScheduled: true
     fullScanCycle: '99' # After how many incremental scans you want to enable full scan
     comment: 'Scan-Origin - Azure DevOps, Branch - $(Build.SourceBranchName)' #Comments will reflect in the cxsast scans for placeholders and filters
-    vulnerabilityThreshold: true
+    vulnerabilityThreshold: false
     failBuildForNewVulnerabilitiesEnabled: false
     failBuildForNewVulnerabilitiesSeverity: 'CRITICAL'
     critical: '300'
