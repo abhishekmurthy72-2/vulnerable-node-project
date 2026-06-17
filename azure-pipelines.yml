@@ -87,4 +87,4 @@ steps:
   ## Only required when you need exploitable path  
     isEnableScaResolver: true
     pathToScaResolver: '$(Build.SourcesDirectory)'
-    scaResolverAddParameters: '-s $(Build.SourcesDirectory) -n $(projectName)  -r scaResults/results.json --sast-result-path sastResults/results.json --cxuser $(sastUsername) --cxserver $(sastUrl) --cxpassword $(sastPassword) --cxprojectname $(projectName)  --log-level Debug'
+    scaResolverAddParameters: '--log-level Debug -s $(Build.SourcesDirectory) -n $(projectName)  -r scaResults/results.json --sast-result-path sastResults/results.json --cxuser $(sastUsername) --cxserver $(sastUrl) --cxpassword $(sastPassword) --cxprojectname $(projectName)'
