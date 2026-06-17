@@ -45,18 +45,14 @@ steps:
       ls -l
 #************************************************************** 
 
-  # - task: Checkmarx AST@3
-  #   inputs:
-  #     CheckmarxService: 'Cx_Prajwal_PS'
-  #     projectName: '$(Build.Repository.Name)'
-  #     branchName: '$(Build.SourceBranchName)'
-  #     tenantName: '5twda'
-  #     additionalParams: '--scan-types "sast"'
-
-# - task: Building dependencies 
-#   input: 
-#     script: "mvn clean install -U"    
-
+# - task: Checkmarx AST@3
+#   inputs:
+#     CheckmarxService: 'Cx_Prajwal_PS'
+#     projectName: '$(Build.Repository.Name)'
+#     branchName: '$(Build.SourceBranchName)'
+#     tenantName: '5twda'
+#     additionalParams: '--scan-types "sast"'
+  
 # - task: Checkmarx AST@3
 #   inputs:
 #     CheckmarxService: 'CX_Auth_details'
@@ -65,6 +61,9 @@ steps:
 #     tenantName: 'sdsdfsef'
 #     additionalParams: '--scan-types "sca" --sca-resolver "C:\Tools\ScaResolver\ScaResolver-win64 (3)\ScaResolver.exe" --sca-resolver-params "--log-level 'Debug' --extract-depth 10 --extract-archives zip --disable-delta-scan  --proxies proxyurl:port "'
 
+# - task: Building dependencies 
+#   input: 
+#     script: "mvn clean install -U"    
 - task: Application security testing@2026
   displayName: Running SCA using SCA Resolver
   inputs:
@@ -74,6 +73,8 @@ steps:
     enableDependencyScan: true
     dependencyServerURL: 'CXSCACHAMPION'
     scaTeam: '/Champions'
+
+  ## Only required when you need exploitable path  
     isEnableScaResolver: true
     pathToScaResolver: '$(Build.SourcesDirectory)'
     scaResolverAddParameters: '-s $(Build.SourcesDirectory) -n $(projectName)  -r scaResults/results.json --sast-result-path sastResults/results.json --cxuser $(sastUsername) --cxserver $(sastUrl) --cxpassword $(sastPassword) --cxprojectname $(projectName)  --log-level Debug'
