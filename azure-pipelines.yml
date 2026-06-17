@@ -40,7 +40,6 @@ steps:
     high: '10'
     medium: '10'
     low: '10'
-    enablePolicyViolations: true
     enableDependencyScan: false
  
 #******The below Dowloading and extract SCA Resolver is optional if your agent already has an SCA path available *******
